@@ -165,6 +165,11 @@
     <!-- /.page -->
 @endsection
 
+@push('plugin_scripts')
+    <script src="{{ asset('admin/vendor/easy-pie-chart/jquery.easypiechart.min.js') }}"></script>
+    <script src="{{ asset('admin/vendor/chart.js/Chart.min.js') }}"></script>
+@endpush
+
 @push('scripts')
     <script src="{{ asset('admin/javascript/pages/dashboard-demo.js') }}"></script>
 @endpush
