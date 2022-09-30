@@ -1,11 +1,11 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Blog Overview')
+@section('title', 'Post Overview')
 
 @section('content')
     <!-- .page -->
     <div class="page">
-        @if (count($blogs) > 0)
+        @if (count($blogs) > 0 OR $q)
             <!-- .page-inner -->
             <div class="page-inner">
                 <!-- .page-title-bar -->
@@ -19,7 +19,7 @@
                         </ol>
                     </nav><!-- /.breadcrumb -->
                     <!-- floating action -->
-                    <a href="{{ route('admin.blogs.create') }}" class="btn btn-success btn-floated">
+                    <a href="{{ route('admin.blogs.create') }}" class="btn btn-success btn-floated d-flex justify-content-center align-items-center">
                         <span class="fa fa-plus"></span>
                     </a>
                     <!-- /floating action -->
@@ -72,11 +72,10 @@
                                     <thead>
                                         <tr>
                                             <th colspan="2" style="min-width:120px">SL</th>
-                                            <th> Slug </th>
-                                            <th> Created By </th>
-                                            <th> Updated By </th>
-                                            <th> Created At </th>
-                                            <th> Last Updated </th>
+                                            <th>Author</th>
+                                            <th>Categories</th>
+                                            <th>Tags</th>
+                                            <th>Date</th>
                                             <th style="width:100px; min-width:100px;"> &nbsp; </th>
                                         </tr>
                                     </thead>
@@ -90,18 +89,39 @@
                                                     {{ $key += 1 }}.
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('admin.blog.edit', $blog->id) }}" class="tile tile-img mr-1">
-                                                        <img class="img-fluid" src="{{ asset('admin/images/dummy/img-1.jpg') }}" alt="{{ $blog->name }}">
+                                                    <a href="{{ route('admin.blogs.edit', $blog->id) }}" class="tile tile-img mr-1">
+                                                        <img class="img-fluid" src="{{ $blog->featured_image ?? asset('admin/images/dummy/img-1.jpg') }}" alt="{{ $blog->name }}">
                                                     </a>
-                                                    <a href="{{ route('admin.blog.edit', $blog->id) }}">{{ $blog->name }}</a>
+                                                    <a href="{{ route('admin.blogs.edit', $blog->id) }}">{{ $blog->title }}</a>
                                                 </td>
-                                                <td class="align-middle"> {{ $blog->slug }} </td>
                                                 <td class="align-middle"> {{ $blog->created_by ? $blog->createdBy->name : '-' }} </td>
-                                                <td class="align-middle"> {{ $blog->updated_by ? $blog->updatedBy->name : '-' }} </td>
-                                                <td class="align-middle"> {{ $blog->created_at->diffForHumans() }} </td>
-                                                <td class="align-middle"> {{ $blog->updated_at->diffForHumans() }} </td>
+                                                <td class="align-middle">
+                                                    @forelse($blog->categories as $category)
+                                                        <span class="badge badge-primary">{{ $category->name }}</span>
+                                                    @empty
+                                                        -
+                                                    @endforelse
+                                                </td>
+                                                <td class="align-middle">
+                                                    @forelse($blog->tags as $tag)
+                                                        <span class="badge badge-info">{{ $tag->name }}</span>
+                                                    @empty
+                                                        -
+                                                    @endforelse
+                                                </td>
+                                                <td class="align-middle">
+                                                    @if ($blog->updated_at)
+                                                        Last Modified
+                                                        <br />
+                                                        {{ $blog->updated_at->format('Y/m/d - H:i A') }}
+                                                    @else
+                                                        Published
+                                                        <br />
+                                                        {{ $blog->created_at->format('Y/m/d - H:i A') }}
+                                                    @endif
+                                                </td>
                                                 <td class="d-flex justify-content-end align-middle" style="gap: 10px;">
-                                                    <a href="{{ route('admin.blog.edit', $blog->id) }}" class="btn btn-sm btn-icon btn-secondary">
+                                                    <a href="{{ route('admin.blogs.edit', $blog->id) }}" class="btn btn-sm btn-icon btn-secondary">
                                                         <i class="fa fa-pencil-alt"></i> <span class="sr-only">Edit</span>
                                                     </a>
                                                     <form action="{{ route('admin.blogs.destroy', $blog->id) }}" method="POST">

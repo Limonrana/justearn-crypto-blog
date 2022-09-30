@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\CategoryController;
-
+use UniSharp\LaravelFilemanager\Lfm;
 
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
@@ -28,4 +28,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::put('/account', [AccountController::class, 'updateAccount'])->name('account.update');
     Route::get('/account/change-password', [AccountController::class, 'changePassword'])->name('change.password');
     Route::put('/account/update-password', [AccountController::class, 'updatePassword'])->name('update.password');
+
+    Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web']], function () {
+        Lfm::routes();
+    });
 });

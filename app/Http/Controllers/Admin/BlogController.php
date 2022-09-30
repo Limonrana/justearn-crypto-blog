@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\BlogStoreRequest;
+use App\Http\Requests\Admin\BlogUpdateRequest;
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\Tag;
 use App\Services\Admin\BlogServices;
 use Illuminate\Http\Request;
@@ -59,55 +61,56 @@ class BlogController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  BlogStoreRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(BlogStoreRequest $request)
     {
-        dd($request->all(), $request->validated(), $request->safe()->only(['title']));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        $blog = $this->blogServices->store($request->all());
+        if (!$blog) return back()->with('error', 'OOPS! There was an server side error.');
+        return redirect()->route('admin.blogs.edit', $blog->id)->with('success', 'Post was created successfully!');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function edit($id)
     {
-        //
+        $blog = $this->blogServices->getPost($id);
+        $categories = Category::latest()->get();
+        $tags = Tag::latest()->get();
+        $app_url = Config::get('app.url');
+        return view('admin.pages.edit-blog', compact('blog', 'categories', 'tags', 'app_url'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  BlogUpdateRequest $request
+     * @param  Post $blog
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(BlogUpdateRequest $request, Post $blog)
     {
-        //
+        // Retrieve the validated input data and store via category services
+        $blog = $this->blogServices->update($request->all(), $blog);
+        if (!$blog) return back()->with('error', 'OOPS! There was an server side error.');
+        return back()->with('success', 'Post was updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        //
+        // Delete blog post via services
+        $blog = $this->blogServices->destroy($id);
+        if (!$blog) return back()->with('error', 'OOPS! There was an server side error.');
+        return back()->with('success', 'Post was deleted successfully!');
     }
 }

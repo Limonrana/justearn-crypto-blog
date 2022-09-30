@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Category;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -18,11 +20,17 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
         // Crate Super Admin
-         \App\Models\User::factory()->create([
+         User::factory()->create([
              'name' => 'Super Admin',
              'email' => 'admin@gmail.com',
              'password' => Hash::make('Admin@1122'),
              'is_super' => true
+         ]);
+
+         // Create Uncategorized category
+         Category::factory()->create([
+             'name' => 'Uncategorized',
+             'slug' => 'uncategorized'
          ]);
     }
 }

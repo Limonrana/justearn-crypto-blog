@@ -17,14 +17,16 @@ class Post extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'category_id',
         'title',
         'slug',
         'description',
         'featured_image',
+        'alt_text',
         'meta_title',
         'meta_description',
         'meta_keywords',
+        'status',
+        'visibility',
         'created_by',
         'updated_by'
     ];
@@ -36,7 +38,7 @@ class Post extends Model
      */
     public function categories()
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsToMany(Category::class)->withTimestamps();
     }
 
     /**
@@ -46,6 +48,6 @@ class Post extends Model
      */
     public function tags()
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany(Tag::class)->withTimestamps();
     }
 }

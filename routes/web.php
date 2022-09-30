@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Web\PageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('web.welcome');
+Route::name('web.')->group(function () {
+    Route::get('/', [PageController::class, 'home'])->name('home');
 });
 
 require __DIR__.'/auth.php';

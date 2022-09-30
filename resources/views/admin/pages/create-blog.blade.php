@@ -16,18 +16,22 @@
                             <a href="{{ route('admin.dashboard') }}"><i class="breadcrumb-icon fa fa-angle-left mr-2"></i>Dashboard</a>
                         </li>
                     </ol>
-                </nav><!-- /.breadcrumb -->
-                <!-- floating action -->
-                <a href="{{ route('admin.blogs.create') }}" class="btn btn-success btn-floated">
-                    <span class="fa fa-plus"></span>
-                </a>
-                <!-- /floating action -->
+                </nav>
+                <!-- /.breadcrumb -->
                 <!-- title and toolbar -->
                 <div class="d-md-flex align-items-md-start">
-                    <h1 class="page-title mr-sm-auto"> Create New Post </h1>
-                    <!-- .btn-toolbar -->
+                    <h1 class="page-title mr-sm-auto">Create New Post</h1>
                 </div>
                 <!-- /title and toolbar -->
+                @if ($errors->any())
+                    <div class="alert alert-danger mt-2">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             </header>
             <!-- /.page-title-bar -->
             <!-- .page-section -->
@@ -43,14 +47,18 @@
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label class="col-form-label" for="title">Title</label>
-                                        <input class="form-control" id="title" name="title" type="text" placeholder="Post title">
-                                        <div id="edit-slug-box" class="mt-2">
+                                        <input class="form-control" id="title" name="title" type="text" onchange="handleTitle(this)" placeholder="Post title">
+                                        <div id="edit-slug-box" class="d-none mt-2">
                                             <strong>Permalink:</strong>
                                             <span id="sample-permalink">
-                                                <a href="{{ $app_url }}">{{ $app_url }}/<span id="editable-post-name">blog</span>/</a>
+                                                <a href="{{ $app_url }}">{{ $app_url }}/<span id="editable-post-name">blog</span></a>
+                                                <span id="editable-post-input" class="d-none">
+                                                    <input type="text" name="slug" id="slug">
+                                                </span>
                                             </span>
                                             <span id="edit-slug-buttons">
-                                                <button type="button" class="btn btn-secondary btn-xs" aria-label="Edit permalink">Edit</button>
+                                                <button type="button" class="btn btn-secondary btn-xs" id="edit-slug-btn" aria-label="Edit permalink">Edit</button>
+                                                <button type="button" class="btn btn-subtle-success btn-xs d-none" id="save-slug-btn" aria-label="Edit permalink">Save</button>
                                             </span>
                                         </div>
                                     </div>
@@ -71,7 +79,7 @@
                                             <span>SEO Title</span>
                                             <span class="text-muted">Max 60 characters used</span>
                                         </label>
-                                        <input type="text" class="form-control" id="meta_title" name="meta_description" placeholder="SEO Title" />
+                                        <input type="text" class="form-control" id="meta_title" name="meta_title" placeholder="SEO Title" />
                                     </div>
                                     <div class="form-group">
                                         <label class="d-flex justify-content-between" for="meta_description">
@@ -173,10 +181,37 @@
                                     <h6 class="card-heading mb-0">Featured image</h6>
                                 </div>
                                 <div class="card-body">
-                                    <div class="form-group mb-3">
+                                    <div id="lfm-input" class="form-group mb-3">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="fileupload-customInput">
-                                            <label class="custom-file-label" for="fileupload-customInput">Choose files</label>
+                                            <input type="text" class="custom-file-input" name="featured_image" id="featured_image">
+                                            <label class="custom-file-label" for="featured_image">Choose files</label>
+                                        </div>
+                                    </div>
+                                    <div id="lfm-preview" class="card card-figure d-none">
+                                        <figure class="figure">
+                                            <div class="figure-img">
+                                                <img class="img-fluid" src="#" alt="Card image">
+                                            </div>
+                                            <figcaption class="figure-caption">
+                                                <ul class="list-inline d-flex text-muted mb-0">
+                                                    <li id="preview-name" class="list-inline-item text-truncate mr-auto">Photo.jpg</li>
+                                                    <li class="list-inline-item">
+                                                        <a href="#collapseAltText" class="collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseStatus">
+                                                            Edit Info
+                                                        </a>
+                                                    </li>
+                                                    <li class="list-inline-item">
+                                                        <a href="#" id="remove-preview">Remove</a>
+                                                    </li>
+                                                </ul>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                    <div class="collapse" id="collapseAltText">
+                                        <hr class="mt-3 mb-0" />
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="alt_text">Alt Text</label>
+                                            <input class="form-control" id="alt_text" name="alt_text" type="text" placeholder="EX: Laravel Development">
                                         </div>
                                     </div>
                                 </div>
@@ -204,11 +239,8 @@
     </style>
 @endpush
 
-@push('styles')
-
-@endpush
-
 @push('plugin_scripts')
+    <script src="{{ asset('vendor/laravel-filemanager/js/stand-alone-button.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="https://cdn.tiny.cloud/1/9c8eaxi8zutqzgs3cdz7hjzv8f6j1eo0htyi5ijyfm8i95r4/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 @endpush
@@ -220,18 +252,29 @@
             plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
             toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
             height: 450,
+            // extended_valid_elements : 'mycustomblock[id],mycustominline',
+            // custom_elements : 'mycustomblock,~mycustominline',
             file_picker_callback (callback, value, meta) {
-                let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth
-                let y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight
+                var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
+                var y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight;
+
+                var cmsURL = '/admin/laravel-filemanager?editor=' + meta.fieldname;
+                if (meta.filetype === 'image') {
+                    cmsURL = cmsURL + "&type=Images";
+                } else {
+                    cmsURL = cmsURL + "&type=Files";
+                }
                 tinymce.activeEditor.windowManager.openUrl({
-                    url : '/file-manager/tinymce5',
+                    url : cmsURL,
                     title : 'Media Manager',
                     width : x * 0.8,
                     height : y * 0.8,
+                    resizable : "yes",
+                    close_previous : "no",
                     onMessage: (api, message) => {
-                        callback(message.content, { text: message.text })
+                        callback(message.content);
                     }
-                })
+                });
             }
         });
 
@@ -276,5 +319,97 @@
                 document.getElementById('blog-form').submit();
             }
         }
+
+        function handleTitle (event) {
+            const slugBox = document.getElementById('edit-slug-box');
+            const editAbleText = document.getElementById('editable-post-name');
+            const slugInput = document.getElementById('slug');
+            let altText = document.getElementById('alt_text');
+            let value = event.value;
+            let generateSlugValue = value.toLowerCase().split(',').join('').replace(/\s/g,"-");
+            if (value !== '') {
+                if (slugBox.classList.contains('d-none')) slugBox.classList.remove('d-none');
+                editAbleText.innerText = generateSlugValue;
+                slugInput.value = generateSlugValue;
+                altText.value = value;
+            } else {
+                if (!slugBox.classList.contains('d-none')) slugBox.classList.add('d-none');
+                editAbleText.innerText = '';
+                slugInput.value = '';
+                altText.value = '';
+            }
+         }
+
+        function editSlug (type) {
+            const editAbleText = document.getElementById('editable-post-name');
+            const editAbleInput = document.getElementById('editable-post-input');
+            const editButton = document.getElementById('edit-slug-btn');
+            const saveButton = document.getElementById('save-slug-btn');
+
+            if (type === 'edit-slug-btn') {
+                editButton.classList.add('d-none');
+                saveButton.classList.remove('d-none');
+                editAbleText.classList.add('d-none');
+                editAbleInput.querySelector('input').value = editAbleText.innerText;
+                editAbleInput.classList.remove('d-none');
+            } else {
+                saveButton.classList.add('d-none');
+                editButton.classList.remove('d-none');
+                editAbleText.classList.remove('d-none');
+                editAbleInput.classList.add('d-none');
+                editAbleText.innerText = editAbleInput.querySelector('input').value;
+            }
+        }
+
+        document.getElementById('edit-slug-buttons').addEventListener('click', function (event) {
+            const button = event.target;
+            editSlug(button.id);
+        });
+
+        function lfm (id, type, options) {
+            let button = document.getElementById(id);
+            button.addEventListener('click', function () {
+                let route_prefix = (options && options.prefix) ? options.prefix : '/laravel-filemanager';
+                let lfmInput = document.getElementById('lfm-input');
+                let lfmPreview = document.getElementById('lfm-preview');
+                let targetPreview = lfmPreview.querySelector('img');
+                let targetName = lfmPreview.querySelector('#preview-name');
+
+                window.open(route_prefix + '?type=' + type || 'file', 'FileManager', 'width=900,height=600');
+                window.SetUrl = function (items) {
+                    // set the value of the desired input to image url
+                    button.value = items.map(function (item) {
+                        return item.url;
+                    }).join(',');
+
+                    button.dispatchEvent(new Event('change'));
+                    // set or change the preview image src and image name
+                    items.forEach(function (item) {
+                        targetPreview.src = item.url;
+                        targetName.innerText = item.name;
+                    });
+                    // trigger change event
+                    targetPreview.dispatchEvent(new Event('change'));
+                    if (!lfmInput.classList.contains('d-none')) lfmInput.classList.add('d-none');
+                    if (lfmPreview.classList.contains('d-none')) lfmPreview.classList.remove('d-none');
+                };
+            });
+        };
+
+        lfm('featured_image', 'Images', {prefix: '/admin/laravel-filemanager'});
+
+        function handleMediaManager() {
+            let button = document.getElementById('featured_image');
+            let lfmInput = document.getElementById('lfm-input');
+            let lfmPreview = document.getElementById('lfm-preview');
+            button.value = '';
+            if (!lfmPreview.classList.contains('d-none')) lfmPreview.classList.add('d-none');
+            if (lfmInput.classList.contains('d-none')) lfmInput.classList.remove('d-none');
+        }
+
+        document.querySelector('#remove-preview').addEventListener('click', function (event) {
+            event.preventDefault();
+            handleMediaManager();
+        });
     </script>
 @endpush

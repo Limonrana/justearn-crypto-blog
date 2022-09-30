@@ -29,4 +29,20 @@ class BlogStoreRequest extends FormRequest
             'slug' => ['required', 'max: 100', Rule::unique('posts')]
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'title.required'    => 'Post title is missing, please put the title then slug will be appear auto!',
+            'title.max'         => 'OOPS! Post title should be not be more then 100 characters.',
+            'slug.required'     => 'Permalink slug is missing, please put the title then slug will be appear auto!',
+            'slug.unique'       => 'OOPS! Permalink slug should be unique, please rewrite the slug.',
+            'slug.max'          => 'OOPS! Permalink slug should not be more then 100 characters.',
+        ];
+    }
 }
