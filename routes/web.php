@@ -16,6 +16,11 @@ use App\Http\Controllers\Web\PageController;
 
 Route::name('web.')->group(function () {
     Route::get('/', [PageController::class, 'home'])->name('home');
+    Route::get('/{slug}', [PageController::class, 'post'])->name('post');
+    Route::get('/tag/{slug}', [PageController::class, 'tag'])->name('tag');
+//    Route::get('/search', [PageController::class, 'search'])->name('search');
+    Route::get('/category/{slug}', [PageController::class, 'category'])->name('category');
+    Route::post('/recaptcha', [PageController::class, 'recaptcha'])->name('recaptcha');
 });
 
 require __DIR__.'/auth.php';

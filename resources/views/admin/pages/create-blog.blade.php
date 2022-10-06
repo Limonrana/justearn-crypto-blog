@@ -47,13 +47,13 @@
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label class="col-form-label" for="title">Title</label>
-                                        <input class="form-control" id="title" name="title" type="text" onchange="handleTitle(this)" placeholder="Post title">
+                                        <input class="form-control" id="title" name="title" type="text" onchange="handleTitle(this)" placeholder="Post title" value="{{ old('title') }}">
                                         <div id="edit-slug-box" class="d-none mt-2">
                                             <strong>Permalink:</strong>
                                             <span id="sample-permalink">
-                                                <a href="{{ $app_url }}">{{ $app_url }}/<span id="editable-post-name">blog</span></a>
+                                                <a href="{{ $app_url }}">{{ $app_url }}/<span id="editable-post-name">{{ old('slug') }}</span></a>
                                                 <span id="editable-post-input" class="d-none">
-                                                    <input type="text" name="slug" id="slug">
+                                                    <input type="text" name="slug" id="slug" value="{{ old('slug') }}">
                                                 </span>
                                             </span>
                                             <span id="edit-slug-buttons">
@@ -64,7 +64,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="col-form-label" for="editor">Content</label>
-                                        <textarea id="editor" rows="10" name="description"></textarea>
+                                        <textarea id="editor" rows="10" name="description">{!! old('description') !!}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -79,14 +79,14 @@
                                             <span>SEO Title</span>
                                             <span class="text-muted">Max 60 characters used</span>
                                         </label>
-                                        <input type="text" class="form-control" id="meta_title" name="meta_title" placeholder="SEO Title" />
+                                        <input type="text" class="form-control" id="meta_title" name="meta_title" placeholder="SEO Title" value="{{ old('meta_title') }}" />
                                     </div>
                                     <div class="form-group">
                                         <label class="d-flex justify-content-between" for="meta_description">
                                             <span>Meta Description</span>
                                             <span class="text-muted">Max 160 characters used</span>
                                         </label>
-                                        <textarea class="form-control" id="meta_description" name="meta_description" rows="3" placeholder="Meta Description"></textarea>
+                                        <textarea class="form-control" id="meta_description" name="meta_description" rows="3" placeholder="Meta Description">{!! old('meta_description') !!}</textarea>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label" for="select2-tagging">Meta Keywords</label>
@@ -133,6 +133,13 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="list-group-item d-flex justify-content-between align-items-center p-0 mb-2">
+                                        <span>Featured Post</span>
+                                        <label class="switcher-control">
+                                            <input type="checkbox" class="switcher-input" name="is_featured" @if(old('is_featured')) checked @endif>
+                                            <span class="switcher-indicator"></span>
+                                        </label>
+                                    </div>
                                 </div>
                                 <div class="card-footer justify-content-end px-3 py-2">
                                     <button type="button" class="btn btn-primary" onclick="handlePublish('1')">Publish</button>
@@ -145,10 +152,6 @@
                                 </div>
                                 <div class="card-body px-4">
                                     <div class="form-group mb-3">
-                                        <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input" type="checkbox" name="categories[]" id="category-0" value="0">
-                                            <label class="custom-control-label" for="category-0">Uncategorized</label>
-                                        </div>
                                         @foreach($categories as $category)
                                             <div class="custom-control custom-checkbox">
                                                 <input class="custom-control-input" type="checkbox" name="categories[]" id="category-{{ $category->id }}" value="{{ $category->id }}">

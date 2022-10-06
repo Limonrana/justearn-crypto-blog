@@ -3,7 +3,15 @@
     <div class="container">
         <div class="mobile-header-content d-flex justify-content-between align-items-center">
             <div class="mobile-header-logo">
-                <img src="{{ asset('web/images/logo.webp') }}" alt="">
+                @if($header && $header->has('logo') && $header['logo'])
+                    <img src="{{ $header['logo'] }}"
+                         @if($header->has('logo_width')) width="{{ $header['logo_width'] }}px" @endif
+                         @if($header->has('logo_height')) height="{{ $header['logo_height'] }}px" @endif
+                         alt="{{ $header->has('alt_text') ? $header['alt_text'] : config('app.name') }}"
+                    >
+                @else
+                    <h2 class="text-uppercase text-black">{{ config('app.name') }}</h2>
+                @endif
             </div>
             <div class="mobile-header-menu d-flex ">
                 <div class="mobile-menu-canvas">
@@ -18,22 +26,10 @@
                         <div class="offcanvas-body">
                             <div class="header-menu">
                                 <ul >
-                                    <li ><a data-bs-toggle="collapse" href="#mobileMenuCollapse" role="button" aria-expanded="false" aria-controls="mobileMenuCollapse">Home <span><svg width="15px"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z"/></svg></span></a>
-
-                                        <ul class="collapse ms-4" id="mobileMenuCollapse">
-                                            <li ><a href="#">Category Page</a></li>
-                                            <li ><a href="#">post page</a></li>
-                                            <li ><a href="#">author Page</a></li>
-                                            <li ><a href="#">about us</a></li>
-                                            <li ><a href="#">Contact us</a></li>
-                                            <li ><a href="#">Regular</a></li>
-                                        </ul>
-                                    </li>
-                                    <li ><a href="#">LifeStyle</a></li>
-                                    <li ><a href="#">Fashion</a></li>
-                                    <li ><a href="#">Technology</a></li>
-                                    <li ><a href="#">Health</a></li>
-                                    <li ><a href="#">Travel</a></li>
+                                    <li><a href="{{ route('web.home') }}">Home</a></li>
+                                    @foreach($getTopCategories as $menu)
+                                        <li><a href="{{ route('web.category', $menu->slug) }}">{{ $menu->name }}</a></li>
+                                    @endforeach
                                 </ul>
                             </div>
 
@@ -41,7 +37,7 @@
                     </div>
                 </div>
                 <div class="header-search-btn">
-                    <span><a href="#"><svg width="15px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></a></span>
+                    <span><a href="javascript:;"><i class="fas fa-search"></i></a></span>
                 </div>
             </div>
         </div>

@@ -1,20 +1,6 @@
 /*=========================================
-Media Query of product details Are Here! 
+Media Query of product details Are Here!
 ==========================================*/
-
-/* // X-Large devices (large desktops, less than 1400px) */
-@media (max-width: 1399.98px) {  }
-
-
-
-/* // Large devices (desktops, less than 1200px) */
-@media (max-width: 1199.98px) {
-  
-  
-    
- }
-
-
 /* // Medium devices (tablets, less than 992px) */
 @media (max-width: 991.98px) {
 .blog-sidebar-layout-1 .blog-post-content {
@@ -44,15 +30,15 @@ Media Query of product details Are Here!
         width: 100% !important;
     }
 
-    
+
 }
 /* // X-Small devices (portrait phones, less than 576px) */
-@media (max-width: 575.98px) { 
+@media (max-width: 575.98px) {
    .container {
         max-width: 100% !important;
     }
     .blog-sidebar-layout-1 .blog-post-content {
-       
+
         width: 100%;
         align-items: center;
     }
@@ -64,7 +50,7 @@ Media Query of product details Are Here!
     .most-read-section-with-sidebar .most-read-post-img-wrapper {
         width: 100%;
     }
-      
+
     .most-read-section-with-sidebar .blog-post-body {
         width: 100%;
         padding: 15px 5px 10px 0;
@@ -78,6 +64,6 @@ Media Query of product details Are Here!
 
     margin-bottom: 10px;
 }
-  
+
 }
 

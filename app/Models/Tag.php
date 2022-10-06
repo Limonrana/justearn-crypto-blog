@@ -32,4 +32,14 @@ class Tag extends Model
     {
         return $this->belongsToMany(Post::class);
     }
+
+    /**
+     * This static function that are find option field.
+     *
+     * @var array
+     */
+    public static function getTopTags(int $limit)
+    {
+        return self::orderByDesc('name')->limit($limit)->get();
+    }
 }

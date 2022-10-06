@@ -96,7 +96,7 @@
                                             <!-- tr -->
                                             <tr>
                                                 <td class="align-middle col-checker">
-                                                    {{ $key += 1 }}.
+                                                    {{ $tags->firstItem() + $key }}.
                                                 </td>
                                                 <td>
                                                     <a href="#" class="tile tile-img mr-1">

@@ -23,10 +23,10 @@ class BlogServices
             return Post::with(['categories', 'tags', 'createdBy', 'updatedBy'])
                 ->when($search, function ($query) use ($search) {
                     return $query->where('title', 'like', "%{$search}%");
-                })->latest()->paginate('10');
+                })->latest('id')->paginate('10');
         }  else {
             return Post::with(['categories', 'tags', 'createdBy', 'updatedBy'])
-                ->latest()->paginate('10');
+                ->latest('id')->paginate('10');
         }
     }
 
@@ -38,6 +38,12 @@ class BlogServices
      */
     public function store(array $all) : Post
     {
+        $is_featured = false;
+        if (array_key_exists('is_featured', $all)) {
+            if ($all['is_featured'] === 'on') {
+                $is_featured = true;
+            }
+        }
         $post = new Post();
         $post->title              =  $all['title'];
         $post->slug               =  $all['slug'];
@@ -50,6 +56,7 @@ class BlogServices
                                         Arr::join($all['meta_keywords'], ', ') : null;
         $post->status             =  $all['status'];
         $post->visibility         =  $all['visibility'];
+        $post->is_featured        =  $is_featured;
         $post->save();
 
         // sync all category and tags
@@ -94,6 +101,7 @@ class BlogServices
                                         Arr::join($all['meta_keywords'], ', ') : null;
         $post->status             =  $all['status'];
         $post->visibility         =  $all['visibility'];
+        $post->is_featured        =  array_key_exists('is_featured', $all) ? true : false;
         $post->save();
 
         // sync all category and tags

@@ -86,7 +86,7 @@
                                             <!-- tr -->
                                             <tr>
                                                 <td class="align-middle col-checker">
-                                                    {{ $key += 1 }}.
+                                                    {{ $blogs->firstItem() + $key }}.
                                                 </td>
                                                 <td>
                                                     <a href="{{ route('admin.blogs.edit', $blog->id) }}" class="tile tile-img mr-1">

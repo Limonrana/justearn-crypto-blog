@@ -26,7 +26,8 @@ class BlogStoreRequest extends FormRequest
     {
         return [
             'title' => ['required', 'max: 100'],
-            'slug' => ['required', 'max: 100', Rule::unique('posts')]
+            'slug' => ['required', 'max: 100', Rule::unique('posts')],
+            'meta_description' => ['max: 160'],
         ];
     }
 
@@ -43,6 +44,7 @@ class BlogStoreRequest extends FormRequest
             'slug.required'     => 'Permalink slug is missing, please put the title then slug will be appear auto!',
             'slug.unique'       => 'OOPS! Permalink slug should be unique, please rewrite the slug.',
             'slug.max'          => 'OOPS! Permalink slug should not be more then 100 characters.',
+            'meta_description.max' => 'OOPS! Permalink meta description can not be more then 160 characters.',
         ];
     }
 }

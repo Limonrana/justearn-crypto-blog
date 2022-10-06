@@ -47,8 +47,8 @@
                     <li class="menu-header">CMS Manage</li>
                     <!-- /.menu-header -->
                     <!-- .menu-item -->
-                    <li class="menu-item">
-                        <a href="landing-page.html" class="menu-link">
+                    <li class="menu-item {{ Request::is('admin/media*') ? 'has-active' : '' }}">
+                        <a href="{{ route('admin.media') }}" class="menu-link">
                             <span class="menu-icon fas fa-images"></span> <span class="menu-text">Media</span>
                         </a>
                     </li>
@@ -85,23 +85,20 @@
                     </li>
                     <!-- /.menu-item -->
                     <!-- .menu-item -->
-                    <li class="menu-item has-child">
+                    <li class="menu-item has-child {{ Request::is('admin/appearance*') ? 'has-open' : '' }}">
                         <a href="#" class="menu-link">
                             <span class="menu-icon oi oi-puzzle-piece"></span> <span class="menu-text">Appearance</span>
                         </a>
                         <!-- child menu -->
                         <ul class="menu">
-                            <li class="menu-item">
-                                <a href="component-general.html" class="menu-link">Theme Settings</a>
+                            <li class="menu-item {{ Request::is('admin/appearance/customize*') ? 'has-active' : '' }}">
+                                <a href="{{ route('admin.customize.index', 'header') }}" class="menu-link">Customize</a>
                             </li>
-                            <li class="menu-item">
-                                <a href="component-icons.html" class="menu-link">Color Settings</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="component-sortable-nestable.html" class="menu-link">Menu</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="component-activity.html" class="menu-link">Grid Layout</a>
+{{--                            <li class="menu-item">--}}
+{{--                                <a href="#" class="menu-link">Theme Settings</a>--}}
+{{--                            </li>--}}
+                            <li class="menu-item {{ Request::is('admin/appearance/menus*') ? 'has-active' : '' }}">
+                                <a href="{{ route('admin.menus.index') }}" class="menu-link">Menu Builder</a>
                             </li>
                         </ul>
                         <!-- /child menu -->
@@ -111,47 +108,28 @@
                     <li class="menu-header">Account Manage </li>
                     <!-- /.menu-header -->
                     <!-- .menu-item -->
-                    <li class="menu-item has-child">
-                        <a href="#" class="menu-link">
+                    <li class="menu-item {{ Request::is('admin/settings*') ? 'has-active' : '' }}">
+                        <a href="{{ route('admin.settings.index', 'general') }}" class="menu-link">
                             <span class="menu-icon oi oi-wrench"></span> <span class="menu-text">Settings</span>
                         </a>
-                        <!-- child menu -->
-                        <ul class="menu">
-                            <li class="menu-item">
-                                <a href="auth-comingsoon-v1.html" class="menu-link">General</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="auth-comingsoon-v1.html" class="menu-link">SEO Settings</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="auth-comingsoon-v1.html" class="menu-link">Email Settings</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="auth-comingsoon-v1.html" class="menu-link">Analytics Settings</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="auth-comingsoon-v1.html" class="menu-link">reCAPTCHA Settings</a>
-                            </li>
-                        </ul>
-                        <!-- /child menu -->
                     </li>
                     <!-- /.menu-item -->
                     <!-- .menu-item -->
-                    <li class="menu-item has-child">
-                        <a href="#" class="menu-link">
-                            <span class="menu-icon oi oi-person"></span> <span class="menu-text">User</span>
-                        </a>
-                        <!-- child menu -->
-                        <ul class="menu">
-                            <li class="menu-item">
-                                <a href="user-profile.html" class="menu-link">Users Overview</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="user-activities.html" class="menu-link">Add New User</a>
-                            </li>
-                        </ul>
-                        <!-- /child menu -->
-                    </li>
+{{--                    <li class="menu-item has-child">--}}
+{{--                        <a href="#" class="menu-link">--}}
+{{--                            <span class="menu-icon oi oi-person"></span> <span class="menu-text">User</span>--}}
+{{--                        </a>--}}
+{{--                        <!-- child menu -->--}}
+{{--                        <ul class="menu">--}}
+{{--                            <li class="menu-item">--}}
+{{--                                <a href="user-profile.html" class="menu-link">Users Overview</a>--}}
+{{--                            </li>--}}
+{{--                            <li class="menu-item">--}}
+{{--                                <a href="user-activities.html" class="menu-link">Add New User</a>--}}
+{{--                            </li>--}}
+{{--                        </ul>--}}
+{{--                        <!-- /child menu -->--}}
+{{--                    </li>--}}
                     <!-- /.menu-item -->
                     <!-- .menu-item -->
                     <li class="menu-item {{ Request::is('admin/account*') ? 'has-active' : '' }}">

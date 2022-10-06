@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
 
         // Crate Super Admin
          User::factory()->create([
-             'name' => 'Super Admin',
+             'name' => 'Limon Rana',
              'email' => 'admin@gmail.com',
              'password' => Hash::make('Admin@1122'),
              'is_super' => true
@@ -30,7 +30,9 @@ class DatabaseSeeder extends Seeder
          // Create Uncategorized category
          Category::factory()->create([
              'name' => 'Uncategorized',
-             'slug' => 'uncategorized'
+             'slug' => 'uncategorized',
+             'created_by' => 1,
+             'updated_by' => 1
          ]);
     }
 }

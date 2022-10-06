@@ -32,4 +32,14 @@ class Category extends Model
     {
         return $this->belongsToMany(Post::class);
     }
+
+    /**
+     * This static function that are find option field.
+     *
+     * @var array
+     */
+    public static function getTopCategories(int $limit)
+    {
+        return self::withCount(['posts'])->orderByDesc('posts_count')->limit($limit)->get();
+    }
 }

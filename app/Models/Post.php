@@ -28,8 +28,29 @@ class Post extends Model
         'status',
         'visibility',
         'created_by',
-        'updated_by'
+        'updated_by',
+        'is_featured'
     ];
+
+    /**
+     * Get Next Post Attribute
+     *
+     * @return Post
+     */
+    public function getNextAttribute()
+    {
+        return static::where('id', '>', $this->id)->orderBy('id','asc')->first();
+    }
+
+    /**
+     * Get Previous Post Attribute
+     *
+     * @return Post
+     */
+    public  function getPreviousAttribute()
+    {
+        return static::where('id', '<', $this->id)->orderBy('id','desc')->first();
+    }
 
     /**
      * This Model relationship with Category Model.

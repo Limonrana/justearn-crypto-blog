@@ -96,7 +96,7 @@
                                             <!-- tr -->
                                             <tr>
                                                 <td class="align-middle col-checker">
-                                                    {{ $key += 1 }}.
+                                                    {{ $categories->firstItem() + $key }}.
                                                 </td>
                                                 <td>
                                                     <a href="#" class="tile tile-img mr-1">
@@ -110,13 +110,13 @@
                                                 <td class="align-middle"> {{ $category->created_at->diffForHumans() }} </td>
                                                 <td class="align-middle"> {{ $category->updated_at->diffForHumans() }} </td>
                                                 <td class="d-flex justify-content-end align-middle" style="gap: 10px;">
-                                                    <button type="button" class="btn btn-sm btn-icon btn-secondary" data-toggle="modal" data-target="#categoryEdit" onclick="editCategory({{ $category->id }})">
+                                                    <button type="button" class="btn btn-sm btn-icon btn-secondary" @if($category->id !== 1) data-toggle="modal" data-target="#categoryEdit" onclick="editCategory({{ $category->id }})" @else disabled @endif>
                                                         <i class="fa fa-pencil-alt"></i> <span class="sr-only">Edit</span>
                                                     </button>
-                                                    <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST">
+                                                    <form @if($category->id !== 1) action="{{ route('admin.categories.destroy', $category->id) }}" @endif method="POST">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-icon btn-secondary" id="delete">
+                                                        <button type="submit" class="btn btn-sm btn-icon btn-secondary" @if($category->id !== 1) id="delete" @else disabled @endif>
                                                             <i class="far fa-trash-alt"></i> <span class="sr-only">Remove</span>
                                                         </button>
                                                     </form>

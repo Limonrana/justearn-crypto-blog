@@ -153,6 +153,13 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="list-group-item d-flex justify-content-between align-items-center p-0 mb-2">
+                                        <span>Featured Post</span>
+                                        <label class="switcher-control">
+                                            <input type="checkbox" class="switcher-input" name="is_featured" @if ($blog->is_featured) checked @endif>
+                                            <span class="switcher-indicator"></span>
+                                        </label>
+                                    </div>
                                 </div>
                                 <div class="card-footer justify-content-end px-3 py-2">
                                     <button type="button" class="btn btn-primary" onclick="handlePublish('1')">Update</button>
@@ -165,10 +172,6 @@
                                 </div>
                                 <div class="card-body px-4">
                                     <div class="form-group mb-3">
-                                        <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input" type="checkbox" name="categories[]" id="category-0" value="0">
-                                            <label class="custom-control-label" for="category-0">Uncategorized</label>
-                                        </div>
                                         @foreach($categories as $category)
                                             <div class="custom-control custom-checkbox">
                                                 <input class="custom-control-input" type="checkbox" name="categories[]" id="category-{{ $category->id }}" value="{{ $category->id }}" @if(IsCollectionValueExist($blog->categories, $category->id)) checked @endif>
@@ -203,7 +206,7 @@
                                 <div class="card-body">
                                     <div id="lfm-input" class="form-group mb-3 @if($blog->featured_image) d-none @endif">
                                         <div class="custom-file">
-                                            <input type="text" class="custom-file-input" name="featured_image" id="featured_image">
+                                            <input type="text" class="custom-file-input" name="featured_image" id="featured_image" value="{{ $blog->featured_image }}">
                                             <label class="custom-file-label" for="featured_image">Choose files</label>
                                         </div>
                                     </div>

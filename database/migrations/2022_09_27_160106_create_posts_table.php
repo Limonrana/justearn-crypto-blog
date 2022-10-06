@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('visibility')->default('1');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
+            $table->boolean('is_featured')->default(false);
             $table->timestamps();
         });
     }
