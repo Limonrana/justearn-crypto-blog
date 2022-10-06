@@ -14,7 +14,7 @@ use App\Http\Controllers\Web\PageController;
 |
 */
 
-Route::name('web.')->group(function () {
+Route::name('web.')->middleware(['html.minifier'])->group(function () {
     Route::get('/', [PageController::class, 'home'])->name('home');
     Route::get('/{slug}', [PageController::class, 'post'])->name('post');
     Route::get('/tag/{slug}', [PageController::class, 'tag'])->name('tag');

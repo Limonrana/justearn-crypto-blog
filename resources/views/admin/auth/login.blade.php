@@ -10,7 +10,15 @@
     <form class="auth-form" method="POST" action="{{ route('login') }}">
         @csrf
         <!-- Validation Errors -->
-        <x-admin.auth-validation-errors class="mb-4" :errors="$errors"></x-admin.auth-validation-errors>
+        @if ($errors->any())
+            <div class="alert alert-danger mt-2">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <!-- .form-group -->
         <div class="form-group">
             <div class="form-label-group">
